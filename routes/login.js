@@ -28,23 +28,27 @@ router.post('/', (req, res, next) => {
             if (error) {
                 res.code(400).render('login', {'message': "Couldn't log in!"});
             }
-            let decryptedPassword = cryptr.decrypt(results[0].senha);
-            if (decryptedPassword === password) {
-                let user = {
-                    nome: results[0].nome,
-                    user: results[0].user,
-                    id: results[0].id,
-                    logged_in: true
-
-                };
-                req.session.user = user;
-                res.redirect('/index');
+            if (results.length > 0) {
+                let decryptedPassword = cryptr.decrypt(results[0].senha);
+                if (decryptedPassword === password) {
+                    let user = {
+                        nome: results[0].nome,
+                        user: results[0].user,
+                        id: results[0].id,
+                        logged_in: true
+                    };
+                    req.session.user = user;
+                    res.redirect('/index');
+                } else {
+                    res.render('login', {
+                        'message': 'Invalid username/password!'
+                    });
+                }
             } else {
                 res.render('login', {
                     'message': 'Invalid username/password!'
                 });
             }
-            
         });
     }
 

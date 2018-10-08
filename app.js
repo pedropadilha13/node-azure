@@ -25,9 +25,12 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(session({
   secret: 'lalala',
   resave: false,
-  _expires: Date.now() + 3600000,
   saveUninitialized: true,
-  cookie: { secure: 'auto' }
+  cookie: {
+    name: 'testeNome',
+    secure: 'auto',
+    maxAge: new Date(Date.now() + (3600000))
+ }
 }));
 
 app.use((req, res, next) => {

@@ -19,13 +19,12 @@ router.post('/', (req, res, next) => {
     let password = req.body.password;
 
     if (isNull(name) || isNull(username) || isNull(password)) {
-        console.log('entrou no if');
         res.status(400).json({'error': 'Invalid name, username and/or password!'});
     }
     
     password = cryptr.encrypt(password);
     
-    console.log(`name: ${name}, username: ${username}, password: ${password}`);
+    //console.log(`name: ${name}, username: ${username}, password: ${password}`);
 
     createUser(name, username, password, (error, results, rows) => {
         if (error) {
