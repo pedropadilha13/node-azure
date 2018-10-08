@@ -8,7 +8,7 @@ const cryptr = new Cryptr(config.security.key);
 
 router.get('/', (req, res, next) => {
     res.render('login', {
-        'message': ''
+        'message': req.session.message || ''
     });
 });
 
@@ -30,13 +30,15 @@ router.post('/', (req, res, next) => {
             }
             let decryptedPassword = cryptr.decrypt(results[0].senha);
             if (decryptedPassword === password) {
-                req.session.status = true;
-                req.session.user = {
+                let user = {
                     nome: results[0].nome,
                     user: results[0].user,
-                    id: results[0].id
+                    id: results[0].id,
+                    logged_in: true
+
                 };
-                res.render('index');
+                req.session.user = user;
+                res.redirect('/index');
             } else {
                 res.render('login', {
                     'message': 'Invalid username/password!'

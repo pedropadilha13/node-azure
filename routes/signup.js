@@ -8,7 +8,9 @@ const cryptr = new Cryptr(config.security.key);
 
 
 router.get('/', (req, res, next) => {
-    res.render('signup');
+    res.render('signup', {
+        message: ''
+    });
 });
 
 router.post('/', (req, res, next) => {
@@ -27,40 +29,46 @@ router.post('/', (req, res, next) => {
 
     createUser(name, username, password, (error, results, rows) => {
         if (error) {
-            res.json({"message": "Error creating user.",
-                      "error": error});
+            res.render('signup', {"message": error, "error": "Error creating user."});
+        } else {
+            req.session.message = `User ${username} created succesfully! Please log in...`;
+            res.status(302).redirect('/login');
         }
-        res.render('login', {
-            "messages": {
-                "success": "User created succesfully!"
-            }
-        });
     });
 
 });
 
 function createUser(name, username, password, callback) {
-    if (!checkUser(username)) {
-        let querystring = `INSERT INTO User (nome, user, senha) VALUES ('${name}', '${username}', '${password}');`;
-        Database.query(querystring, callback);
-    } else {
-        callback("User already exists!");
-    }
+    let create = undefined;
+    let check = checkUser(username);
+    check.then((resolve) => {
+        create = !resolve;
+        console.log('create:', create);
+        if (create) {
+            let querystring = `INSERT INTO User (nome, user, senha) VALUES ('${name}', '${username}', '${password}');`;
+            Database.query(querystring, callback);
+        } else {
+            callback("User already exists!");
+        }
+    }).catch((err) => {
+        console.log('Promise err');
+    });
 }
 
-function checkUser(username) {
+ function checkUser(username) {
     let querystring = `SELECT * FROM User WHERE user = '${username}'`;
-    let ret;
-    Database.query(querystring, (error, results, rows) => {
+    let p = new Promise((resolve, reject) => {
+        Database.query(querystring, (error, results, rows) => {
         if (error) {
             console.log(error);
-            ret = true;
+            reject(error);
         } else {
-            ret = results.length > 0 ? true : false;
-        }
+                let exists = results.length > 0;
+                resolve(exists);
+            }
+        });
     });
-    console.log(ret);
-    return ret;
+    return p;
 }
 
 module.exports = router;

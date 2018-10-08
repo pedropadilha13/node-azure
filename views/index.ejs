@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="pt-br; en" id="home">
    	<head>
-      	<title>Login</title>
+      	<title>Index</title>
      	<meta charset="UTF-8">
    	    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
       	<meta name="msapplication-TileColor" content="#ffffff">
@@ -28,19 +28,22 @@
    	<body id="body">
       	<div class="row">
         	<div class="col-md-12 mx-auto">
-				<div>
-                    Status: <%= session.status ? session.status : ''  %>
-                </div>
+				<div class="row">
+					<div class="info col-md-12">Tela logada linda maravilhosa!</div>
+					<div class="info col-md-12">Informações do cookie:</div>
+					<br><br>
+					<div class="info col-md-12">Olá <b><%= session.user.nome %></b>!</div>
+					<div class="info col-md-12">Seu nome de usuário é <b><%= session.user.user %></b> e seu id é <b><%= session.user.id %></b>!</div>
+				</div>
+				<br>
                 <div>
-                    <button type="button" onclick='<%= !session.status ? "login();" : "logout()" %>'>
-                    <%= !session.status ? 'Login' : 'Logout'%>
-                    </button>
+                    <button class="btn btn-danger" type="button" onclick="logout();">Logout</button>
                 </div>
          	</div>
       	</div>
         <script src="assets/js/main.js"></script>
         <script>
-            <%= message %>
+            
         </script>
    	</body>
 </html>

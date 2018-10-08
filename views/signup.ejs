@@ -28,24 +28,26 @@
    	<body id="body">
       	<div class="row">
         	<div class="col-md-12 mx-auto">
-				<div class="col-md-2">
+				<div class="col-md-6">
                     <form id="signUp" method="post" action="/signup">
                         <div class="form-group">
-                            <label for="loginUsername">Name: </label>
-                            <input type="text" class="form-control" id="loginUsername" name="name">
+                            <label for="inputName">Name: </label>
+                            <input type="text" class="form-control" id="inputName" name="name">
                         </div>
 						<div class="form-group">
-							<label for="loginUsername">Username: </label>
-							<input type="text" class="form-control" id="loginUsername" name="username">
+							<label for="inputUsername">Username: </label>
+							<input type="text" class="form-control" id="inputUsername" name="username">
 						</div>
 						<div class="form-group">
-							<label for="loginPassword">Password: </label>
-							<input type="text" class="form-control" id="loginPassword" name="password">
+							<label for="inputPassword">Password: </label>
+							<input type="password" class="form-control" id="inputPassword" name="password">
 						</div>
 						<div>
-							<input type="submit" class="form-control btn-success" value="Cadastrar">
+							<input type="submit" class="form-control btn btn-success" value="Cadastrar">
 						</div>
 					</form>
+					<div class="text-right">Já tem um cadastro? Faça <a href="/login">login</a></div>
+					<div><%=message%></div>
 				</div>
          	</div>
       	</div>
