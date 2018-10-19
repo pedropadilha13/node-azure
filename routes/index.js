@@ -6,8 +6,8 @@ router.get('/', function(req, res, next) {
     res.redirect('/login');
   } else {
     res.render('index', {
-    session: req.session
-  });
+      session: req.session
+    });
   }
 });
 

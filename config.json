@@ -5,6 +5,12 @@
         "password": "BandTec123",
         "database": "pedropad_bandtec"
     },
+    "databasea": {
+        "host": "",
+        "user": "",
+        "password": "",
+        "database": ""
+    },
     "security": {
         "key": "OLHAQUANTASEGURANCAHEIN"
     }

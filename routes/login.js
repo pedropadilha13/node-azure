@@ -7,9 +7,15 @@ const config = require('../config');
 const cryptr = new Cryptr(config.security.key);
 
 router.get('/', (req, res, next) => {
-    res.render('login', {
-        'message': req.session.message || ''
-    });
+    if (!req.session.user || req.session.user && !req.session.user.logged_in) {
+        res.render('login', {
+            'message': req.session.message || ''
+        });
+    } else {
+        res.render('index', {
+            session: req.session
+        });
+    }
 });
 
 router.post('/', (req, res, next) => {
@@ -26,7 +32,7 @@ router.post('/', (req, res, next) => {
         Database.query(`SELECT * FROM User WHERE user = '${username}';`, (error, results, rows) => {
             console.log('entrou no query');
             if (error) {
-                res.code(400).render('login', {'message': "Couldn't log in!"});
+                res.status(400).render('login', {'message': "Couldn't log in!"});
             }
             if (results.length > 0) {
                 let decryptedPassword = cryptr.decrypt(results[0].senha);
