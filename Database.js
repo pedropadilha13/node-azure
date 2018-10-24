@@ -1,29 +1,30 @@
 'use strict';
-var mysql = require('mysql');
-var sql = require('mssql');
-var config = require("./config").database;
-
-/*var query = function(queryString = '', callback) {
-	var connection = mysql.createConnection(config);
-	connection.connect();
-	connection.query(queryString, callback);
-	connection.end();
-};*/
-
-var query = function(queryString = '') {
-	return new Promise((res, rej) => {
-        sql.connect(config).then(pool => {
-            return pool.request().query(queryString);
-        }).then(results => {
-            res(results);
-        }).catch(e => {
-            rej(e);
-        }).finally(() => {
-            sql.close();
-        });
-    });
-};
+var config = require("./config").database2;
+var isNull = require('./script').isNull;
 
 module.exports = {
-	'query': query
+	'query': function(queryString) {
+        if (isNull(queryString)) {
+            return null;
+        } else {
+            var sql = require('mssql');
+        	return new Promise((resolve, reject) => {
+                console.log('Establishing connection to Database...')
+                sql.connect(config).then(pool => {
+                    console.log('Connected to Database!');
+                    return pool.request().query(queryString);
+                }).then(results => {
+                    console.log('Query succeded!');
+                    console.log('Closing connection...');
+                    sql.close();
+                    resolve(results);
+                }).catch(error => {
+                    console.log('Error executing query :(', error);
+                    console.log('Closing connection...');
+                    sql.close();
+                    reject(error);
+                });
+            });
+        }
+    }
 };

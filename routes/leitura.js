@@ -15,11 +15,7 @@ router.get('/', (req, res, next) => {
         res.redirect('/login');
     } else {*/
         let limit = 50;
-        Database.query(`SELECT TOP ${limit} momento, temperatura, umidade FROM leitura`, (error, results, rows) => {
-            if (error) {
-                console.log(error);
-                res.status(400).json({"error": "error reading database"});
-            }
+        Database.query(`SELECT TOP ${limit} momento, temperatura, umidade FROM leitura`).then(results => {
             results = results.recordsets[0];
 
             let data = [['momento', 'temperatura', 'umidade']];
@@ -32,8 +28,9 @@ router.get('/', (req, res, next) => {
                 data.push(entry);
             }
             res.json(data);
+        }).catch(error => {
+            res.status(400).json({message: "error reading database", error: error});
         });
-    //}
 });
 
 router.get('/dt', (req, res, next) => {
@@ -65,27 +62,9 @@ router.get('/dt', (req, res, next) => {
         res.json(response);
     }).catch(error => {
         console.log(error);
-        res.status(400).json({"error": "error reading database"});
+        res.status(400).json({message: "error reading database", error: error});
     });
 
-});
-
-router.post('/', (req, res, next) => {
-    Database.query(`INSERT INTO LEITURA (temperatura, umidade, momento)
-                    VALUES (${req.body.temperatura}, ${req.body.umidade}, NOW())`, (error, results, rows) => {
-                        if (error) {
-                            res.json({
-                                code: 0,
-                                message: 'failed to add values to database',
-                                error: error
-                            });
-                        }
-                        res.json({
-                            code: 1,
-                            message: 'success',
-                            response: results
-                        });
-                    });
 });
 
 module.exports = router;
