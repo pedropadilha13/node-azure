@@ -71,3 +71,12 @@
 
 ### [views/signup.ejs](views/signup.ejs)
 #### Formulário de cadastro - view renderizada quando um usuário acessa a rota `'/signup'`
+
+## Issues
+#### Caso tenha algum problema e/ou sugestão, sinta-se à vontade para abrir uma [issue](https://github.com/pedropadilha13/node-azure/issues)
+
+## Dúvidas
+#### Em caso de dúvida, você pode me mandar um e-mail em qualquer um dos seguintes endereços:
+- contato@pedropadilha.com
+- pedropadilha@me.com
+- pedropadilhafarroco@hotmail.com
