@@ -1,33 +1,73 @@
+
 # node-azure
 
-#### Na sua máquina:
+#### Projeto modelo de Pesquisa e Inovação (1º semestre ADS 2018-2)
 
-1. ```git clone <repo-url>```
-2. ```npm install express-generator```
-3. ```express --view=pug nome-do-projeto``` (mesmo nome do diretório clonado)
-Quando for pedido, digite y para continuar a criar no diretório do repositório clonado
-4. ```cd nome-do-projeto```
-5. ```npm install```
-6. ```npm run start```
-    Depois, navegue para localhost:3000
+## Conteúdo
 
-#### No Azure:
+### [Database.js](Database.js)
+#### Arquivo genérico de conexão com o banco de dados
+   ```query```: função que executa uma query, passada como parâmetro - retorna uma Promise
 
-1. Create New Resource
-    1. Node JS Empty Web App
-    2. Escolher o App Name, Subscription e Resource Group (Esperar o deploy)
-3. Depois de criado o recurso:
-    1. Application Settings
-    2. Application Settings
-    3. Add new setting
-    4. WEBSITE_NODE_DEFAULT_VERSION 8.9.4
-    5. Save
-4. Deployment Options
-    1. Disconnect > Yes
-    2. Setup > GitHub > Entre na sua conta
-    3. Escolha o repositório correto
-    4. Clique no último commit e faça o deploy
-5. Na página do recurso, procure por "Editor", clique nele e depois em Go
-    1. Na aba Console
-        1. ```npm install```
-    2. Run (Ctrl + F5)
+### [config.json](config.json)
+#### Arquivo que contém configurações gerais do projeto (ex: parâmetros de conexão com o banco de dados)
+
+### [public/chart.html](public/chart.html)
+#### Arquivo que demonstra a exibição do gráfico de temperatura e umidade, populado com dados do banco de dados configurado no arquivo [config.json](config.json)
+
+### [routes](routes/)
+#### Diretório que contém as rotas do servidor
+
+- ### [routes/index.js](routes/index.js)
+	- #### GET /
+		- Usuário logado: renderiza a view index
+		- Usuário não logado: renderiza a view login
+
+- ### [routes/leitura.js](routes/leitura.js)
+	- #### GET / -> retorna um JSON com as últimas 50 leituras, no formato que o 	banco de dados devolveu
+	- #### GET /dt -> retorna um JSON com as últimas 50 leituras, no formato [DataTable](https://developers.google.com/chart/interactive/docs/reference#DataTable), utilizado para construir o gráfico com a biblioteca [Google Charts](https://developers.google.com/chart).
+
+- ### [routes/login.js](routes/login.js)
+	- #### GET /
+		- Usuário logado: renderiza a view `index`
+		- Usuário não logado: renderiza a view `login`
+	- #### POST /
+		- Usuário e senha corretos: renderiza a view `index`
+		- Usuário e/ou senha incorretos: renderiza a view `login`, com a mensagem de erro `'Invalid usernamename/password!'`.
+
+- ### [routes/logout.js](routes/logout.js)
+	- #### GET
+		- Destrói a `session`
+
+- ### [routes/signup.js](routes/signup.js)
+	- #### GET
+		- Renderiza a view `signup`
+	- #### POST
+		-	Recebe no corpo da requisição os dados de cadastro
+		-	Caso o usuário já seja cadastrado, não cadastra novamente e retorna a mensagem de erro `'User already exists!'`
+		-	Caso o usuário não seja cadastrado, insere o registro no banco e redireciona para a página de [login](routes/login.js), com a mensagem `'User ${username} created succesfully! Please log in...'`, onde username é o nome do usuário recém criado
+
+### [script.js](script.js)
+#### Arquivo que contém funçoões genéricas, usadas em diversos arquivos
+		Ex.: isNull
+
+### [temp_um/temp_um.ino](temp_um/temp_um.ino)
+#### Sketch que faz a leitura da temperatura e umidade do sensor [DHT11](https://www.adafruit.com/product/386) e manda os dados via porta serial para o computador
+
+### [tabelas.sql](tabelas.sql)
+#### Script de criação das tabelas utilizadas neste exemplo
+
+### [views](views/)
+#### Diretório que contém as views
+
+### [views/error.ejs](views/error.ejs)
+#### Renderizada quando ocorre um erro "não tratado"
+
+### [views/index.ejs](views/index.ejs)
+#### Tela principal - view renderizada quando um usuário logado tenta acessar as seguintes rotas: `'/', '/index', '/login'`
+
+### [views/login.ejs](views/login.ejs)
+#### Formulário de login - view renderizada quando um usuário não logado tenta acessar as seguintes rotas: `'/', '/index', '/login'`
+
+### [views/signup.ejs](views/signup.ejs)
+#### Formulário de cadastro - view renderizada quando um usuário acessa a rota `'/signup'`
