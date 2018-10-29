@@ -1,9 +1,17 @@
 .info {
-    font-size: 20px;
     font-family: sans-serif;
-
+    font-size: 20px;
 }
 
 .btn:hover {
     cursor: pointer;
+}
+
+.navbar ul li {
+    padding-left: 5px;
+    padding-right: 5px;
+}
+
+.main-div {
+    margin-top: 56px;
 }

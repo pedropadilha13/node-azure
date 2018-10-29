@@ -37,7 +37,7 @@ router.get('/dt', (req, res, next) => {
 
     let limit = 50;
     let response = {};
-    Database.query(`SELECT TOP ${limit} momento, temperatura, umidade FROM leitura`).then(results => {
+    Database.query(`SELECT TOP ${limit} momento, temperatura, umidade FROM leitura ORDER BY id DESC`).then(results => {
         results = results.recordsets[0];
 
         response.cols = [
@@ -46,6 +46,7 @@ router.get('/dt', (req, res, next) => {
             {id: 'umidade', label: 'umidade', type: 'number'}
         ];
         let rows = [];
+        console.log(results);
         for (let i = 1; i < results.length; i++) {
             let row = results[i];
             //let momento = moment(row.momento).format('YYYY, MM, DD, HH, mm, ss');

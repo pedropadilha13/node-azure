@@ -53,6 +53,7 @@ router.post('/', (req, res, next) => {
                 });
             }
         }).catch(error => {
+            console.error(error);
             res.status(400).render('login', {'message': "Couldn't log in!"});
         });
     }
